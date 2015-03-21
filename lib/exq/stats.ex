@@ -138,7 +138,7 @@ defmodule Exq.Stats do
     date = DateFormat.format!(Date.universal, "%Y-%m-%d", :strftime)
     Exq.Redis.incr!(redis, Exq.RedisQueue.full_key(namespace, "stat:failed:#{date}"))
 
-    failed_at = DateFormat.format!(Date.local, "{ISO}")
+    failed_at = Time.now(:secs)
 
     job = Exq.Job.from_json(json)
     job = Enum.into([{:failed_at, failed_at}, {:error_class, "ExqGenericError"}, {:error_message, error}, {:queue, job.queue}, {:class, job.class}, {:args, job.args}, {:jid, job.jid}, {:enqueued_at, job.enqueued_at}], HashDict.new)
